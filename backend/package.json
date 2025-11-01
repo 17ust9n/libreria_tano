@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "version": "0.1.0",
+  "description": "Backend del proyecto libreria_tano",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "initdb": "node createDB.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "multer": "^2.0.2",
+    "sqlite3": "^5.1.7"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "sqlite",
+    "backend"
+  ],
+  "author": "",
+  "license": "ISC"
+}
