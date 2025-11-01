@@ -1,0 +1,13 @@
+{
+  "name": "libreria_tano-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm-run-all --parallel start:backend start:frontend",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm start"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
