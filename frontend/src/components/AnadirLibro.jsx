@@ -1,53 +1,50 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function ListaLibros() {
-  const [libros, setLibros] = useState([]);
-  const [cargando, setCargando] = useState(true);
+  // 🆕 Estado para nuevo libro
+  const [nuevoLibro, setNuevoLibro] = useState({
+    nombre: "",
+    autor: "",
+    precio: "",
+    genero: "",
+    imagen: null, // archivo
+  });
 
-  // 🔹 Cargar lista de libros desde el backend
-  const cargarLibros = async () => {
-    try {
-      const res = await fetch("http://localhost:3001/libros");
-      if (!res.ok) throw new Error("Error al obtener libros");
-      const data = await res.json();
-      setLibros(data);
-    } catch (error) {
-      console.error("Error al cargar libros:", error);
-      alert("No se pudieron cargar los libros.");
-    } finally {
-      setCargando(false);
-    }
-  };
-
-  // 🔹 Eliminar un libro por ID
-  const eliminarLibro = async (libro) => {
-    const confirmar = window.confirm(
-      `¿Seguro que deseas eliminar el libro "${libro.nombre}"?`
-    );
-    if (!confirmar) return;
+  // 🆕 Agregar nuevo libro
+  const agregarLibro = async (e) => {
+    e.preventDefault();
 
     try {
-      const res = await fetch(`http://localhost:3001/libros/${libro._id}`, {
-        method: "DELETE",
+      const formData = new FormData();
+      formData.append("nombre", nuevoLibro.nombre);
+      formData.append("autor", nuevoLibro.autor);
+      formData.append("precio", nuevoLibro.precio);
+      formData.append("genero", nuevoLibro.genero);
+      if (nuevoLibro.imagen) formData.append("imagen", nuevoLibro.imagen);
+
+      const res = await fetch("http://localhost:3001/libros", {
+        method: "POST",
+        body: formData,
       });
 
-      if (!res.ok) throw new Error("Error al eliminar el libro");
+      if (!res.ok) throw new Error("Error al agregar libro");
+      await res.json();
 
-      // Filtramos el libro eliminado del estado
-      setLibros((prevLibros) =>
-        prevLibros.filter((l) => l._id !== libro._id)
-      );
+      // Limpiar formulario
+      setNuevoLibro({
+        nombre: "",
+        autor: "",
+        precio: "",
+        genero: "",
+        imagen: null,
+      });
 
-      alert(`Libro "${libro.nombre}" eliminado correctamente`);
+      alert("📘 Libro agregado con éxito");
     } catch (error) {
       console.error(error);
-      alert("No se pudo eliminar el libro.");
+      alert("No se pudo agregar el libro.");
     }
   };
-
-  useEffect(() => {
-    cargarLibros();
-  }, []);
 
   // 🎨 Estilos
   const estilos = {
@@ -57,36 +54,33 @@ function ListaLibros() {
       padding: "40px",
       textAlign: "center",
     },
-    tarjeta: {
-      backgroundColor: "#fffaf0",
+    formulario: {
+      backgroundColor: "#fff8dc",
       border: "1px solid #d2b48c",
       borderRadius: "10px",
-      padding: "15px",
-      margin: "10px",
-      width: "200px",
-      textAlign: "center",
-      display: "inline-block",
-      verticalAlign: "top",
-      boxShadow: "0 3px 6px rgba(0,0,0,0.2)",
+      padding: "20px",
+      marginBottom: "30px",
+      width: "400px",
+      margin: "0 auto",
     },
-    imagen: {
+    input: {
+      display: "block",
       width: "100%",
-      height: "auto",
+      padding: "8px",
+      marginBottom: "10px",
       borderRadius: "5px",
-      cursor: "pointer",
+      border: "1px solid #ccc",
     },
-    boton: {
-      backgroundColor: "#b22222",
+    botonAgregar: {
+      backgroundColor: "#2e8b57",
       color: "white",
       border: "none",
       borderRadius: "5px",
-      padding: "8px 12px",
+      padding: "10px 15px",
       cursor: "pointer",
-      marginTop: "10px",
     },
-    info: {
-      textAlign: "left",
-      marginTop: "10px",
+    tituloFormulario: {
+      color: "black",
     },
   };
 
@@ -94,40 +88,60 @@ function ListaLibros() {
     <div style={estilos.contenedor}>
       <h1>📚 Lista de Libros</h1>
 
-      {cargando ? (
-        <p>Cargando libros...</p>
-      ) : libros.length === 0 ? (
-        <p>No hay libros registrados aún.</p>
-      ) : (
-        libros.map((libro) => (
-          <div key={libro._id} style={estilos.tarjeta}>
-            {/* Imagen del libro */}
-            {libro.imagen && (
-              <img
-                src={`http://localhost:3001/media/${libro.imagen}`}
-                alt={libro.nombre}
-                style={estilos.imagen}
-              />
-            )}
-
-            {/* Información del libro */}
-            <div style={estilos.info}>
-              <h3>{libro.nombre}</h3>
-              <p><strong>Autor:</strong> {libro.autor}</p>
-              <p><strong>Género:</strong> {libro.genero}</p>
-              <p><strong>Precio:</strong> ${libro.precio.toFixed(2)}</p>
-            </div>
-
-            {/* Botón de eliminar dentro de la tarjeta */}
-            <button
-              style={estilos.boton}
-              onClick={() => eliminarLibro(libro)}
-            >
-              🗑️ Eliminar
-            </button>
-          </div>
-        ))
-      )}
+      {/* 🆕 Formulario para agregar libro */}
+      <form onSubmit={agregarLibro} style={estilos.formulario}>
+        <h2 style={estilos.tituloFormulario}>➕ Agregar Nuevo Libro</h2>
+        <input
+          style={estilos.input}
+          type="text"
+          placeholder="Nombre"
+          value={nuevoLibro.nombre}
+          onChange={(e) =>
+            setNuevoLibro({ ...nuevoLibro, nombre: e.target.value })
+          }
+          required
+        />
+        <input
+          style={estilos.input}
+          type="text"
+          placeholder="Autor"
+          value={nuevoLibro.autor}
+          onChange={(e) =>
+            setNuevoLibro({ ...nuevoLibro, autor: e.target.value })
+          }
+          required
+        />
+        <input
+          style={estilos.input}
+          type="number"
+          step="0.01"
+          placeholder="Precio"
+          value={nuevoLibro.precio}
+          onChange={(e) =>
+            setNuevoLibro({ ...nuevoLibro, precio: e.target.value })
+          }
+        />
+        <input
+          style={estilos.input}
+          type="text"
+          placeholder="Género"
+          value={nuevoLibro.genero}
+          onChange={(e) =>
+            setNuevoLibro({ ...nuevoLibro, genero: e.target.value })
+          }
+        />
+        <input
+          style={estilos.input}
+          type="file"
+          accept="image/*"
+          onChange={(e) =>
+            setNuevoLibro({ ...nuevoLibro, imagen: e.target.files[0] })
+          }
+        />
+        <button type="submit" style={estilos.botonAgregar}>
+          📘 Agregar Libro
+        </button>
+      </form>
     </div>
   );
 }

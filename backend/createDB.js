@@ -1,6 +1,4 @@
 const sqlite3 = require('sqlite3').verbose();
-
-// Conectar a la BD (se crea si no existe)
 const db = new sqlite3.Database('database.db');
 
 db.serialize(() => {
@@ -17,4 +15,4 @@ db.serialize(() => {
 });
 
 db.close();
-console.log("Base de datos creada correctamente con el campo imagen");
+console.log("Base de datos creada correctamente con el campo id autoincremental");

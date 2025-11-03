@@ -72,6 +72,21 @@ app.post('/libros', upload.single('imagen'), (req, res) => {
   );
 });
 
+// Eliminar libro por ID
+app.delete('/libros/:id', (req, res) => {
+  const { id } = req.params;
+  db.run('DELETE FROM libros WHERE id = ?', [id], function(err) {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).json({ error: err.message });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: 'Libro no encontrado' });
+    }
+    res.json({ message: 'Libro eliminado correctamente' });
+  });
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
