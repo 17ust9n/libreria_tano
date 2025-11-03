@@ -130,14 +130,22 @@ function ListaLibros() {
             setNuevoLibro({ ...nuevoLibro, genero: e.target.value })
           }
         />
+        <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
         <input
-          style={estilos.input}
-          type="file"
-          accept="image/*"
-          onChange={(e) =>
-            setNuevoLibro({ ...nuevoLibro, imagen: e.target.files[0] })
-          }
-        />
+        style={{ ...estilos.input, marginBottom: 0, flex: 1 }}
+        type="file"
+        accept="image/*"
+        onChange={(e) =>
+        setNuevoLibro({ ...nuevoLibro, imagen: e.target.files[0] })
+        }/>
+    {nuevoLibro.imagen && (
+    <span style={{ marginLeft: "10px", color: "black", fontStyle: "italic" }}>
+      {nuevoLibro.imagen.name}
+    </span>
+      )}
+      </div>
+
+
         <button type="submit" style={estilos.botonAgregar}>
           📘 Agregar Libro
         </button>
