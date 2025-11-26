@@ -22,7 +22,7 @@ function ListaLibros() {
       formData.append("genero", nuevoLibro.genero);
       if (nuevoLibro.imagen) formData.append("imagen", nuevoLibro.imagen);
 
-      const res = await fetch("http://localhost:3001/libros", {
+      const res = await fetch("https://libreria-tano-backend.onrender.com/libros", {
         method: "POST",
         body: formData,
       });

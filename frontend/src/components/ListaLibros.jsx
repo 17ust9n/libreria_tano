@@ -7,7 +7,7 @@ function ListaLibros() {
   // 🔹 Cargar lista de libros desde el backend
   const cargarLibros = async () => {
     try {
-      const res = await fetch("http://localhost:3001/libros");
+      const res = await fetch("https://libreria-tano-backend.onrender.com/libros");
       if (!res.ok) throw new Error("Error al obtener libros");
       const data = await res.json();
       setLibros(data);
@@ -30,7 +30,7 @@ function ListaLibros() {
     if (!confirmar) return;
 
     try {
-      const res = await fetch(`http://localhost:3001/libros/${id}`, {
+      const res = await fetch(`https://libreria-tano-backend.onrender.com/libros/${id}`, {
         method: "DELETE",
       });
 
@@ -102,7 +102,7 @@ function ListaLibros() {
             <div style={{ display: "flex", alignItems: "center" }}>
               {libro.imagen && (
                 <img
-                  src={`http://localhost:3001/media/${libro.imagen}`}
+                  src={`https://libreria-tano-backend.onrender.com/media/${libro.imagen}`}
                   alt={libro.nombre}
                   style={estilos.imagen}
                 />

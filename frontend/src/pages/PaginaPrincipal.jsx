@@ -1,3 +1,4 @@
+import API_URL from '../config';
 import { useEffect, useState } from "react";
 import AnadirLibro from "../components/AnadirLibro";
 
@@ -10,7 +11,7 @@ function PaginaPrincipal() {
 
   const fetchLibros = async () => {
     try {
-      const res = await fetch("http://localhost:3001/libros");
+      const res = await fetch("https://libreria-tano-backend.onrender.com/libros");
       if (!res.ok) throw new Error("Error al obtener libros");
       const data = await res.json();
       setLibros(data);
@@ -53,7 +54,7 @@ function PaginaPrincipal() {
       // Asegúrate de que id sea válido
       if (!id) return;
   
-      const res = await fetch(`http://localhost:3001/libros/${id}`, {
+      const res = await fetch(`https://libreria-tano-backend.onrender.com/${id}`, {
         method: "DELETE",
       });
   
@@ -131,7 +132,7 @@ function PaginaPrincipal() {
                   boxShadow: "0 3px 8px rgba(0,0,0,0.3)"
                 }}>
                   {libro.imagen && (
-                    <img src={`http://localhost:3001/media/${libro.imagen}`} alt={libro.nombre} style={{ width: "100%", height: "auto", borderRadius: 5 }} />
+                    <img src={`https://libreria-tano-backend.onrender.com/media/${libro.imagen}`} alt={libro.nombre} style={{ width: "100%", height: "auto", borderRadius: 5 }} />
                   )}
                   <h3>{libro.nombre}</h3>
                   <p><b>Autor:</b> {libro.autor}</p>
@@ -204,7 +205,7 @@ function PaginaPrincipal() {
     }}>
       {libroSeleccionado.imagen && (
         <img
-          src={`http://localhost:3001/media/${libroSeleccionado.imagen}`}
+          src={`https://libreria-tano-backend.onrender.com/media/${libroSeleccionado.imagen}`}
           alt={libroSeleccionado.nombre}
           style={{ width: "100%", height: "auto", borderRadius: 5 }}
         />
